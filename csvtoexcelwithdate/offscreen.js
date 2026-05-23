@@ -272,13 +272,14 @@ function convertAndSend(csvData, filename) {
 
 				const address = getCellAddress(c, r);
 				const trimmed = cellValue.trim();
+				const styleAttr = (r === 0) ? ' s="1"' : '';
 				
 				// Check if cellValue is a valid number
 				const isNum = !isNaN(trimmed) && trimmed !== '';
 				if (isNum) {
-					sheetXml += `      <c r="${address}"><v>${trimmed}</v></c>\n`;
+					sheetXml += `      <c r="${address}"${styleAttr}><v>${trimmed}</v></c>\n`;
 				} else {
-					sheetXml += `      <c r="${address}" t="inlineStr"><is><t>${escapeXML(cellValue)}</t></is></c>\n`;
+					sheetXml += `      <c r="${address}"${styleAttr} t="inlineStr"><is><t>${escapeXML(cellValue)}</t></is></c>\n`;
 				}
 			}
 			sheetXml += '    </row>\n';
@@ -317,8 +318,9 @@ function convertAndSend(csvData, filename) {
 
 		const stylesXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
 			'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">\n' +
-			'  <fonts count="1">\n' +
+			'  <fonts count="2">\n' +
 			'    <font><sz val="11"/><name val="Calibri"/><family val="2"/></font>\n' +
+			'    <font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font>\n' +
 			'  </fonts>\n' +
 			'  <fills count="2">\n' +
 			'    <fill><patternFill patternType="none"/></fill>\n' +
@@ -330,8 +332,9 @@ function convertAndSend(csvData, filename) {
 			'  <cellStyleXfs count="1">\n' +
 			'    <xf numFmtId="0" fontId="0" fillId="0" borderId="0"/>\n' +
 			'  </cellStyleXfs>\n' +
-			'  <cellXfs count="1">\n' +
+			'  <cellXfs count="2">\n' +
 			'    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>\n' +
+			'    <xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>\n' +
 			'  </cellXfs>\n' +
 			'</styleSheet>';
 
