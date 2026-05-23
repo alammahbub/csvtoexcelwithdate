@@ -76,24 +76,34 @@ Below is the directory map of the project:
 
 ## 📥 Installation
 
-### Method A: Install via CRX Package (Fastest)
+### Method A: Load Unpacked Source (Recommended)
 
-1.  Open **Google Chrome** or **Microsoft Edge**.
+This is the standard, most reliable method to run the extension, avoiding signature verification blocks on custom builds:
+
+1.  Clone this repository or download the source directory.
 2.  Navigate to the extensions settings page:
     *   Chrome: [chrome://extensions](chrome://extensions)
     *   Edge: [edge://extensions](edge://extensions)
-3.  Enable **Developer mode** using the toggle switch (typically top-right or bottom-left).
-4.  Drag the `csvtoexcelwithdate.crx` file from your local disk and **drop it anywhere** on the extensions settings page.
-5.  Confirm the prompt to install the extension.
-
-### Method B: Load Unpacked Source (For Developers)
-
-1.  Clone this repository or download the source directory.
-2.  Navigate to [chrome://extensions](chrome://extensions) or [edge://extensions](edge://extensions).
-3.  Enable **Developer mode** (toggle switch).
+3.  Enable **Developer mode** using the toggle switch in the top-right corner.
 4.  Click the **Load unpacked** button in the top-left menu.
 5.  Select the `csvtoexcelwithdate` folder from your local directory.
 6.  The extension is now loaded and will auto-refresh upon file changes.
+
+### Method B: Install via CRX Package (Alternate)
+
+> [!CAUTION]
+> **Signature Proof Block (`CRX_REQUIRED_PROOF_MISSING`)**
+> Starting in modern Chromium versions (Chrome 117+ / Edge 117+), dragging and dropping locally packaged `.crx` files is blocked with an **invalid package** or **proof required** error to prevent sideloading unauthorized software. 
+> 
+> **To run this custom build, we highly recommend using the "Load Unpacked Source" method (Method A) above.**
+
+If you are running an older browser version or have group policies configured to allow local unsigned installations:
+
+1.  Open **Google Chrome** or **Microsoft Edge**.
+2.  Navigate to the extensions settings page.
+3.  Enable **Developer mode** using the toggle switch.
+4.  Drag the `csvtoexcelwithdate.crx` file from your local disk and **drop it anywhere** on the extensions settings page.
+5.  Confirm the prompt to install the extension.
 
 ---
 
