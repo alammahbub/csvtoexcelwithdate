@@ -42,7 +42,7 @@ graph TD
 
 ## 📂 Project Directory Structure
 
-Below is the directory map of the project, highlighting the distinction between git-tracked extension source files and untracked/private packaging assets:
+Below is the directory map of the project:
 
 ```text
 .
@@ -58,14 +58,10 @@ Below is the directory map of the project, highlighting the distinction between 
 │   ├── icon16.png            # Icon for extension toolbar (16x16)
 │   ├── icon48.png            # Icon for extension dashboard (48x48)
 │   └── icon128.png           # Icon for extension management page (128x128)
-├── csvtoexcelwithdate.crx    # Pre-packaged CRX archive for instant installation (untracked)
-├── csvtoexcelwithdate.pem    # Chrome packaging private key (untracked - KEEP CONFIDENTIAL)
+├── csvtoexcelwithdate.crx    # Pre-packaged CRX archive for instant installation (tracked)
+├── csvtoexcelwithdate.pem    # Chrome packaging private key (tracked - KEEP CONFIDENTIAL)
 └── README.md                 # Extension documentation and developer guide (this file)
 ```
-
-> [!WARNING]
-> **Private Key Security**
-> `csvtoexcelwithdate.pem` is your private signature key used to sign the packed extension. To prevent unauthorized extension updates, this file is ignored via `.gitignore` and **must never** be committed to public repositories.
 
 ---
 

@@ -1,5 +1,0 @@
-# Private key for extension packaging (KEEP PRIVATE)
-*.pem
-
-# Pre-packaged extensions
-*.crx
