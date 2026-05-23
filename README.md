@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="csvtoexcelwithdate/icon128.png" alt="csv2xlsx Logo" width="128" height="128" />
+</p>
+
 # 📊 csv2xlsx - Smart Chrome/Edge Extension
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
