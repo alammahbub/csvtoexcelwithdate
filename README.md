@@ -26,7 +26,7 @@ Because Chrome Manifest V3 (MV3) restricts background service workers from acces
 graph TD
     A["🌐 Web Page (CSV Download Triggered)"] -->|"1. Intercepts Download"| B["⚡ bg.js (Service Worker)"]
     B -->|"2. Spawns / Sends Data"| C["🖥️ offscreen.html / offscreen.js"]
-    subgraph Offscreen Document Context (DOM & Web Worker access)
+    subgraph "Offscreen Document Context (DOM & Web Worker access)"
         C -->|"3. Parses CSV Stream"| D["📊 xlsx.full.min.js (SheetJS)"]
         D -->|"4. Generates Excel (.xlsx) Blob"| C
     end
