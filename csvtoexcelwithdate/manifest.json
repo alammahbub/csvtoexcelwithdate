@@ -1,0 +1,25 @@
+{
+	"manifest_version": 3,
+	"name": "csv2xlsx",
+	"description": "Prepends a timestamp to your file download names and converts CSV to XLSX",
+	"version": "0.11.0",
+	"icons": {
+		"16": "icon16.png",
+		"48": "icon48.png",
+		"128": "icon128.png"
+	},
+	"action": {
+		"default_popup": "popup.html"
+	},
+	"background": {
+		"service_worker": "bg.js"
+	},
+	"permissions": [
+		"downloads",
+		"offscreen",
+		"scripting"
+	],
+	"host_permissions": [
+		"<all_urls>"
+	]
+}
