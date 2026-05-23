@@ -2,10 +2,10 @@
   <img src="csvtoexcelwithdate/icon128.png" alt="csv2xlsx Logo" width="128" height="128" />
 </p>
 
-# 📊 csv2xlsx - Smart Chrome/Edge Extension
+# 📊 csv2xlsx - Smart Web Extension (Chrome/Edge/Firefox)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/Platform-Chrome%20%7C%20Edge-lightgrey.svg)](#)
+[![Platform](https://img.shields.io/badge/Platform-Chrome%20%7C%20Edge%20%7C%20Firefox-lightgrey.svg)](#)
 [![Manifest Version](https://img.shields.io/badge/Manifest-V3-orange.svg)](#)
 
 A lightweight, high-performance web extension for Google Chrome and Microsoft Edge that automatically intercepts CSV downloads, prepends the download date/time stamp, and converts them to Microsoft Excel (`.xlsx`) workbooks natively in real-time.
@@ -104,6 +104,17 @@ If you are running an older browser version or have group policies configured to
 3.  Enable **Developer mode** using the toggle switch.
 4.  Drag the `csvtoexcelwithdate.crx` file from your local disk and **drop it anywhere** on the extensions settings page.
 5.  Confirm the prompt to install the extension.
+
+### Method C: Load in Mozilla Firefox (Temporary Add-on)
+
+This extension is fully cross-compatible with Mozilla Firefox Manifest V3. To load it temporarily for testing or development:
+
+1.  Open **Mozilla Firefox**.
+2.  Navigate to the debugging dashboard: `about:debugging`.
+3.  Click on **This Firefox** (in the left-hand sidebar menu).
+4.  Click the **Load Temporary Add-on...** button.
+5.  Browse and select the `manifest.json` file inside the `csvtoexcelwithdate` folder.
+6.  The extension is now active on Firefox and will run natively.
 
 ---
 

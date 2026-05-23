@@ -80,22 +80,34 @@ function stopKeepAlive() {
 // Ensure offscreen document exists
 let creatingOffscreen;
 async function ensureOffscreen() {
-	const contexts = await chrome.runtime.getContexts({
-		contextTypes: ['OFFSCREEN_DOCUMENT'],
-		documentUrls: [chrome.runtime.getURL('offscreen.html')]
-	});
-	if (contexts.length > 0) return;
-
-	if (creatingOffscreen) {
-		await creatingOffscreen;
-	} else {
-		creatingOffscreen = chrome.offscreen.createDocument({
-			url: 'offscreen.html',
-			reasons: ['BLOBS'],
-			justification: 'Convert CSV data to XLSX using SheetJS'
+	if (typeof chrome !== 'undefined' && chrome.offscreen && chrome.offscreen.createDocument) {
+		// Chrome/Edge: Use standard offscreen document API
+		const contexts = await chrome.runtime.getContexts({
+			contextTypes: ['OFFSCREEN_DOCUMENT'],
+			documentUrls: [chrome.runtime.getURL('offscreen.html')]
 		});
-		await creatingOffscreen;
-		creatingOffscreen = null;
+		if (contexts.length > 0) return;
+
+		if (creatingOffscreen) {
+			await creatingOffscreen;
+		} else {
+			creatingOffscreen = chrome.offscreen.createDocument({
+				url: 'offscreen.html',
+				reasons: ['BLOBS'],
+				justification: 'Convert CSV data to XLSX using SheetJS'
+			});
+			await creatingOffscreen;
+			creatingOffscreen = null;
+		}
+	} else {
+		// Firefox: Fallback to creating a hidden iframe in the background page
+		if (document.getElementById('csv2xlsx-firefox-offscreen')) return;
+		
+		const iframe = document.createElement('iframe');
+		iframe.id = 'csv2xlsx-firefox-offscreen';
+		iframe.src = chrome.runtime.getURL('offscreen.html');
+		iframe.style.display = 'none';
+		document.body.appendChild(iframe);
 	}
 }
 
