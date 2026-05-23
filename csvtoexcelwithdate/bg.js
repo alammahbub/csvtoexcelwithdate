@@ -80,7 +80,7 @@ function stopKeepAlive() {
 // Ensure offscreen document exists
 let creatingOffscreen;
 async function ensureOffscreen() {
-	if (typeof chrome !== 'undefined' && chrome.offscreen && chrome.offscreen.createDocument) {
+	if (typeof chrome !== 'undefined' && chrome['offscreen'] && chrome['offscreen']['createDocument']) {
 		// Chrome/Edge: Use standard offscreen document API
 		const contexts = await chrome.runtime.getContexts({
 			contextTypes: ['OFFSCREEN_DOCUMENT'],
@@ -91,7 +91,7 @@ async function ensureOffscreen() {
 		if (creatingOffscreen) {
 			await creatingOffscreen;
 		} else {
-			creatingOffscreen = chrome.offscreen.createDocument({
+			creatingOffscreen = chrome['offscreen']['createDocument']({
 				url: 'offscreen.html',
 				reasons: ['BLOBS'],
 				justification: 'Convert CSV data to XLSX using SheetJS'
@@ -144,9 +144,7 @@ async function showLoading(tabId, filename) {
 							<div style="color:#fff; font-size:16px; font-weight:600; margin-bottom:8px;">
 								Converting CSV to Excel...
 							</div>
-							<div style="color:#9ca3af; font-size:13px; max-width:300px; word-break:break-all;">
-								${fname}
-							</div>
+							<div id="csv2xlsx-fname" style="color:#9ca3af; font-size:13px; max-width:300px; word-break:break-all;"></div>
 							<div id="csv2xlsx-status" style="color:#6b7280; font-size:11px; margin-top:8px;">
 								Fetching data...
 							</div>
@@ -159,6 +157,7 @@ async function showLoading(tabId, filename) {
 					</div>
 				`;
 				document.body.appendChild(overlay);
+				overlay.querySelector('#csv2xlsx-fname').textContent = fname;
 			},
 			args: [filename]
 		});
@@ -216,12 +215,11 @@ async function showError(tabId, errorMsg) {
 								<div style="color:#fff; font-size:16px; font-weight:600; margin-bottom:8px;">
 									Conversion Failed
 								</div>
-								<div style="color:#9ca3af; font-size:13px; max-width:300px;">
-									${msg}
-								</div>
+								<div id="csv2xlsx-error-msg" style="color:#9ca3af; font-size:13px; max-width:300px;"></div>
 							</div>
 						</div>
 					`;
+					overlay.querySelector('#csv2xlsx-error-msg').textContent = msg;
 					setTimeout(() => overlay.remove(), 4000);
 				}
 			},
@@ -230,44 +228,46 @@ async function showError(tabId, errorMsg) {
 	} catch (e) { /* ignore */ }
 }
 
-chrome.downloads.onDeterminingFilename.addListener(function(item, suggest) {
-	const filename = item.filename;
-	const lowerFilename = filename.toLowerCase();
+if (typeof chrome !== 'undefined' && chrome.downloads && chrome.downloads.onDeterminingFilename) {
+	chrome.downloads.onDeterminingFilename.addListener(function(item, suggest) {
+		const filename = item.filename;
+		const lowerFilename = filename.toLowerCase();
 
-	// If this is a download we triggered via a blob URL, suggest our desired custom name
-	if (blobFilenameMap[item.url]) {
-		const desiredName = blobFilenameMap[item.url];
-		delete blobFilenameMap[item.url];
-		suggest({ filename: desiredName });
-		return;
-	}
+		// If this is a download we triggered via a blob URL, suggest our desired custom name
+		if (blobFilenameMap[item.url]) {
+			const desiredName = blobFilenameMap[item.url];
+			delete blobFilenameMap[item.url];
+			suggest({ filename: desiredName });
+			return;
+		}
 
-	// If this is a download we triggered, pass through
-	if (ourDownloads.has(item.id)) {
-		ourDownloads.delete(item.id);
-		suggest({ filename: filename });
-		return;
-	}
-
-	// Check if it's a CSV file
-	if (lowerFilename.endsWith('.csv')) {
-		// Cancel the original CSV download while it's paused
-		chrome.downloads.cancel(item.id, () => {
-			chrome.downloads.erase({ id: item.id });
+		// If this is a download we triggered, pass through
+		if (ourDownloads.has(item.id)) {
+			ourDownloads.delete(item.id);
 			suggest({ filename: filename });
-		});
+			return;
+		}
 
-		// Fetch the CSV, convert, and re-download as XLSX
-		handleCsvConversion(item.url, filename);
+		// Check if it's a CSV file
+		if (lowerFilename.endsWith('.csv')) {
+			// Cancel the original CSV download while it's paused
+			chrome.downloads.cancel(item.id, () => {
+				chrome.downloads.erase({ id: item.id });
+				suggest({ filename: filename });
+			});
 
-		// Return true = async mode, keeps download paused
-		return true;
-	} else {
-		// Non-CSV: just prepend timestamp as before
-		var newFilename = appendTimestamp() + "-" + filename;
-		suggest({ filename: newFilename });
-	}
-});
+			// Fetch the CSV, convert, and re-download as XLSX
+			handleCsvConversion(item.url, filename);
+
+			// Return true = async mode, keeps download paused
+			return true;
+		} else {
+			// Non-CSV: just prepend timestamp as before
+			var newFilename = appendTimestamp() + "-" + filename;
+			suggest({ filename: newFilename });
+		}
+	});
+}
 
 async function proceedWithLargeCsv(csvData, newFilename) {
 	try {
@@ -454,9 +454,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 		// Hide loading overlay
 		if (activeTabId) hideLoading(activeTabId);
 
-		// Trigger save-as dialog for the XLSX (our onDeterminingFilename handles the name via map lookup)
+		// Trigger save-as dialog for the XLSX
 		chrome.downloads.download({
 			url: blobUrl,
+			filename: filename,
 			saveAs: true
 		});
 

@@ -22,5 +22,15 @@
 	],
 	"host_permissions": [
 		"<all_urls>"
-	]
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "csv2xlsx@alammahbub.github.io",
+			"strict_min_version": "109.0",
+			"data_collection_permissions": {
+				"required": ["none"],
+				"optional": ["none"]
+			}
+		}
+	}
 }
