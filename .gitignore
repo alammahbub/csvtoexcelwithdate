@@ -1,0 +1,5 @@
+# Packaging key for extension signing (KEEP PRIVATE)
+*.pem
+
+# Pre-packaged CRX extensions
+*.crx

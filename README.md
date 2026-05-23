@@ -32,6 +32,13 @@ graph TD
     end
     C -->|"5. Returns Blob URL"| B
     B -->|"6. Triggers Final Download with Prepend Timestamp"| E["💾 Local Disk (YYYY-MM-DD_HH.MM.SS-Filename.xlsx)"]
+
+    %% Premium Color Styles
+    style A fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0D47A1
+    style B fill:#FFF3E0,stroke:#EF6C00,stroke-width:2px,color:#E65100
+    style C fill:#EDE7F6,stroke:#673AB7,stroke-width:2px,color:#311B92
+    style D fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20
+    style E fill:#E0F2F1,stroke:#00796B,stroke-width:2px,color:#004D40
 ```
 
 > [!TIP]
@@ -58,8 +65,6 @@ Below is the directory map of the project:
 │   ├── icon16.png            # Icon for extension toolbar (16x16)
 │   ├── icon48.png            # Icon for extension dashboard (48x48)
 │   └── icon128.png           # Icon for extension management page (128x128)
-├── csvtoexcelwithdate.crx    # Pre-packaged CRX archive for instant installation (tracked)
-├── csvtoexcelwithdate.pem    # Chrome packaging private key (tracked - KEEP CONFIDENTIAL)
 └── README.md                 # Extension documentation and developer guide (this file)
 ```
 
