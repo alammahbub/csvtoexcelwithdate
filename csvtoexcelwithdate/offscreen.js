@@ -258,6 +258,32 @@ function convertAndSend(csvData, filename) {
 		let sheetXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
 		sheetXml += '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">\n';
 		sheetXml += `  <dimension ref="${dimensionRef}"/>\n`;
+
+		// Calculate column widths dynamically based on content length
+		const colWidths = new Array(maxCols).fill(10);
+		for (let r = 0; r < rows.length; r++) {
+			const rowData = rows[r];
+			for (let c = 0; c < rowData.length; c++) {
+				const cellValue = rowData[c];
+				if (cellValue !== undefined && cellValue !== null) {
+					const valStr = cellValue.toString();
+					const cellLength = (r === 0) ? Math.ceil(valStr.length * 1.2) : valStr.length;
+					if (cellLength > colWidths[c]) {
+						colWidths[c] = cellLength;
+					}
+				}
+			}
+		}
+
+		if (maxCols > 0) {
+			sheetXml += '  <cols>\n';
+			for (let c = 0; c < maxCols; c++) {
+				const colWidth = Math.min(60, Math.max(12, colWidths[c] + 4));
+				sheetXml += `    <col min="${c + 1}" max="${c + 1}" width="${colWidth.toFixed(2)}" customWidth="1"/>\n`;
+			}
+			sheetXml += '  </cols>\n';
+		}
+
 		sheetXml += '  <sheetData>\n';
 
 		for (let r = 0; r < rows.length; r++) {
